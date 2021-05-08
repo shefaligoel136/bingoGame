@@ -1,19 +1,11 @@
 const Game = require('../../../models/game');
 
-// const Card = require('../../../models/cards');
 
 let arr = createArray(0,75);
 let numbersArray = createArray(0,75);
 let count = 0;
 
-// // http://localhost:8000/api/v1/game/createGame - output : gameId
-// // http://localhost:8000/api/v1/game/joinRoom - input : playerId , gameId , output : card
-// // http://localhost:8000/api/v1/game/details - input : gameId , output : [player-card]
-// // http://localhost:8000/api/v1/game/startGame - socket : number create , broadcast
-
-
-
-
+// This api returns all the current game
 
 module.exports.index = async function(request,response){
     try{
@@ -29,6 +21,8 @@ module.exports.index = async function(request,response){
     }
 }
 
+// This creates a new room, on creation of the room : the person who has created the room, his bingo card generates(createCard() function does that work)
+
 module.exports.createRoom = async function(request,response){
     try{
         let room = await Game.create({
@@ -41,8 +35,6 @@ module.exports.createRoom = async function(request,response){
 
         room.save();
 
-        // console.log(room);
-
         return response.status(200).json({
             data: {
                 room: room,
@@ -54,6 +46,8 @@ module.exports.createRoom = async function(request,response){
         console.log(err);
     }
 }
+
+// this api is for joining the room, as a new player joins his bingo card generates and gets added in the game module
 
 module.exports.joinRoom = async function(request,response){
     try{
@@ -81,6 +75,8 @@ module.exports.joinRoom = async function(request,response){
         console.log(err);
     }
 }
+
+// for starting the game
 
 module.exports.startGame = async function(request,response){
     try{
@@ -134,6 +130,8 @@ module.exports.startGame = async function(request,response){
         console.log(err);
     }
 }
+
+// when a person selects a new number on card, this fucntion gets called
 
 module.exports.playerSelect = async function(request,response){
     try{
