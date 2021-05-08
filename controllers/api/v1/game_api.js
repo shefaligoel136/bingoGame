@@ -14,6 +14,7 @@ let count = 0;
 
 
 
+
 module.exports.index = async function(request,response){
     try{
         let currentGames = await Game.find({})
@@ -132,6 +133,33 @@ module.exports.startGame = async function(request,response){
     }catch(err){
         console.log(err);
     }
+}
+
+module.exports.playerSelect = async function(request,response){
+    try{
+        let game = await (await Game.findOne({_id:request.query.game_id})).execPopulate(function(err,game){
+            // console.log(game.players);
+            game.players.map(player =>{
+                if(player._id == request.query.player_id){
+                    player.bingoNumbers.push(request.query.number)
+                }
+                // console.log(player._id);
+            })
+            return response.status(200).json({
+                data: {
+                    game: game
+        
+                },
+                message: "Room Created",
+            })
+        })
+        
+    
+    
+    }catch(err){
+        console.log(err);
+    }
+    
 }
 
 function generateNumber(min,max){
